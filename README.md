@@ -12,6 +12,7 @@
 ## Features:
 + Download videos.
 + Download audios.
++ Download playlists.
 + Interface.
 
 ## Technologies:

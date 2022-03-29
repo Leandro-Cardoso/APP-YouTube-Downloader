@@ -1,0 +1,2 @@
+# pip install -r requirements.txt
+pytube == 12.0.0
