@@ -34,19 +34,19 @@ class Window(QMainWindow):
 
         self.linksList = QListWidget(self)
         self.linksList.move(50, 50)
-        self.linksList.resize(self.width / 2 - 60, self.height - 350)
+        self.linksList.resize(self.width - 100, self.height - 350)
         self.linksList.setStyleSheet('QListWidget {background-color: #999999; color: #ffffff}')
         self.linksList.clicked.connect(self.selectLinkClick)
 
         self.clearListButton = QPushButton('Clear List', self)
         self.clearListButton.move(50, self.height - 300)
-        self.clearListButton.resize((self.width / 2 - 60) / 2, 30)
+        self.clearListButton.resize((self.width - 100) / 2, 30)
         self.clearListButton.setStyleSheet('QPushButton {background-color: #B55555; color: #ffffff; font: bold; font-size: 12px} QPushButton:hover {background-color: #FF0000; color: #000000}')
         self.clearListButton.clicked.connect(self.clearListButtonClick)
 
         self.addLinkButton = QPushButton('Remove Link', self)
-        self.addLinkButton.move((self.width / 2 - 60) / 2 + 50, self.height - 300)
-        self.addLinkButton.resize((self.width / 2 - 60) / 2, 30)
+        self.addLinkButton.move((self.width - 100) / 2 + 50, self.height - 300)
+        self.addLinkButton.resize((self.width - 100) / 2 , 30)
         self.addLinkButton.setStyleSheet('QPushButton {background-color: #B55555; color: #ffffff; font: bold; font-size: 12px} QPushButton:hover {background-color: #FF0000; color: #000000}')
         self.addLinkButton.clicked.connect(self.removeLinkButtonClick)
 
@@ -62,7 +62,7 @@ class Window(QMainWindow):
         self.addLinkButton.clicked.connect(self.addLinkButtonClick)
 
         self.feedbackLabel = QLabel(self)
-        self.feedbackLabel.setText('Crie uma lista de links para download.')
+        self.feedbackLabel.setText('Paste a YouTube link...')
         self.feedbackLabel.move(50, self.height - 200)
         self.feedbackLabel.resize(self.width - 100, 100)
         self.feedbackLabel.setStyleSheet('QLabel {color: #888888; font: bold; font-size: 20px}')
@@ -82,7 +82,7 @@ class Window(QMainWindow):
 
         self.onlyAudioCheckbox = QCheckBox(self)
         self.onlyAudioCheckbox.setText('Only audio.')
-        self.onlyAudioCheckbox.move(self.width / 2 + 120, self.height - 75)
+        self.onlyAudioCheckbox.move(self.width / 2 + 150, self.height - 75)
         self.onlyAudioCheckbox.resize(200, 50)
         self.onlyAudioCheckbox.setStyleSheet('QCheckBox {color: #FF2222; font: bold; font-size: 14px}')
 
@@ -90,6 +90,8 @@ class Window(QMainWindow):
 
     def loadWindow(self):
         self.setGeometry(self.top, self.left, self.width, self.height)
+        self.setFixedWidth(self.width)
+        self.setFixedHeight(self.height)
         self.setWindowTitle(self.title)
         self.setStyleSheet('QMainWindow {background-color: #111111}')
         self.show()
