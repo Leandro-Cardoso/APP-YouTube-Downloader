@@ -1,5 +1,5 @@
 # Project YouTube Downloader
-> Status: Developing ⚠️
+> Status: Developing ⚠️ (version beta 0.2.0)
 
 <center>
 
@@ -14,6 +14,8 @@
 + Download audios.
 + Download playlists.
 + Interface.
++ Progress bar.
++ Responsive window.
 + Preview videos.
 
 ## Platforms:

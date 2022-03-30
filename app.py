@@ -16,18 +16,10 @@ def downloadYoutubePlaylist(playlist, isOnlyAudio = False):
     for url in playlist:
         downloadYoutubeVideo(url, isOnlyAudio)
 
-def downloadYoutubeLinks(links, isOnlyAudio = False):
-    '''Download a YouTube link list (videos and playlists, in video format or audio)'''
-    for link in links:
-        if 'list' in link:
-            downloadYoutubePlaylist(link, isOnlyAudio)
-        else:
-            downloadYoutubeVideo(link, isOnlyAudio)
-
 # INTERFACE:
 
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QToolTip, QLabel, QLineEdit, QListWidget, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QToolTip, QLabel, QLineEdit, QListWidget, QCheckBox, QProgressBar
 from PyQt5.QtCore import Qt
 
 class Window(QMainWindow):
@@ -38,6 +30,7 @@ class Window(QMainWindow):
         self.width = 1024
         self.height = 720
         self.title = 'YouTube Downloader'
+        self.downloadProgress = 0
 
         self.linksList = QListWidget(self)
         self.linksList.move(50, 50)
@@ -75,17 +68,23 @@ class Window(QMainWindow):
         self.feedbackLabel.setStyleSheet('QLabel {color: #888888; font: bold; font-size: 20px}')
         self.feedbackLabel.setAlignment(Qt.AlignCenter)
 
+        self.progressBar = QProgressBar(self)
+        self.progressBar.move(50, self.height - 65)
+        self.progressBar.resize(self.width / 2 - 200, 30)
+        self.progressBar.setValue(self.downloadProgress)
+        self.progressBar.setStyleSheet('QProgressBar {color: #00FF00; font: bold; font-size: 14px}')
+
+        downloadButton = QPushButton('Download', self)
+        downloadButton.move(self.width / 2 - 100, self.height - 75)
+        downloadButton.resize(200, 50)
+        downloadButton.setStyleSheet('QPushButton {background-color: #6B8E23; color: #ffffff; font: bold; font-size: 24px} QPushButton:hover {background-color: #00FF00; color: #000000}')
+        downloadButton.clicked.connect(self.downloadButtonClick)
+
         self.onlyAudioCheckbox = QCheckBox(self)
         self.onlyAudioCheckbox.setText('Only audio.')
         self.onlyAudioCheckbox.move(self.width / 2 + 120, self.height - 75)
         self.onlyAudioCheckbox.resize(200, 50)
         self.onlyAudioCheckbox.setStyleSheet('QCheckBox {color: #FF2222; font: bold; font-size: 14px}')
-
-        downloadButton = QPushButton('Download', self)
-        downloadButton.move(self.width / 2 - 100, self.height - 75)
-        downloadButton.resize(200, 50)
-        downloadButton.setStyleSheet('QPushButton {background-color: #000000; color: #ffffff; font: bold; font-size: 24px} QPushButton:hover {background-color: #B22222; color: #000000}')
-        downloadButton.clicked.connect(self.downloadButtonClick)
 
         self.loadWindow()
 
@@ -110,6 +109,7 @@ class Window(QMainWindow):
         else:
             self.feedbackLabel.setText('"' + self.addLinkTextBox.text() + '" is added...')
             self.linksList.addItem(self.addLinkTextBox.text())
+        self.resetProgressBar()
         self.addLinkTextBox.clear()
         self.addLinkTextBox.setFocus()
 
@@ -133,17 +133,36 @@ class Window(QMainWindow):
         self.addLinkTextBox.setFocus()
         self.feedbackLabel.setText('List cleaned...')
 
-    def downloadButtonClick(self):
-        self.feedbackLabel.setText('Downloading list...')
+    def createDownloadList(self):
         downloadList = []
         for i in range(0, len(self.linksList)):
             downloadList.append(self.linksList.item(i).text())
+        return downloadList
+
+    def increaseProgressBar(self):
+        self.downloadProgress += 100 / len(self.linksList)
+        self.progressBar.setValue(self.downloadProgress)
+
+    def resetProgressBar(self):
+        self.downloadProgress = 0
+        self.progressBar.setValue(self.downloadProgress)
+
+    def downloadButtonClick(self):
+        downloadList = self.createDownloadList()
+        for link in downloadList:
+            if self.onlyAudioCheckbox.isChecked():
+                if 'list' in link:
+                    downloadYoutubePlaylist(link, True)
+                else:
+                    downloadYoutubeVideo(link, True)
+            else:
+                if 'list' in link:
+                    downloadYoutubePlaylist(link, False)
+                else:
+                    downloadYoutubeVideo(link, False)
+            self.increaseProgressBar()
         self.linksList.clear()
-        if self.onlyAudioCheckbox.isChecked():
-            downloadYoutubeLinks(downloadList, True)
-        else:
-            downloadYoutubeLinks(downloadList, False)
-        self.feedbackLabel.setText('Complete download...')
+        self.feedbackLabel.setText('Download complete...')
 
 app = QApplication(sys.argv)
 MainWindow = Window()
