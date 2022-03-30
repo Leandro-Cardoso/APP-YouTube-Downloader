@@ -14,12 +14,15 @@
 + Download audios.
 + Download playlists.
 + Interface.
++ Preview videos.
+
+## Platforms:
++ Windows
 
 ## Technologies:
 + Python 3.9.7
-<img align="center" alt="Python" height="20" width="30" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg">
 + PyQt5
-<img align="center" alt="PyQT" height="20" width="30" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/qt/qt-original.svg">
++ PyTube
 
 ## How to run:
 + Developing ⚠️
