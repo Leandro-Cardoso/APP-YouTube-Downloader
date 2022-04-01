@@ -19,8 +19,9 @@ def downloadYoutubePlaylist(playlist, isOnlyAudio = False):
 # INTERFACE:
 
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QToolTip, QLabel, QLineEdit, QListWidget, QCheckBox, QProgressBar
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QLineEdit, QListWidget, QCheckBox, QProgressBar, QShortcut
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QKeySequence
 
 class Window(QMainWindow):
     def __init__(self):
@@ -32,52 +33,60 @@ class Window(QMainWindow):
         self.title = 'YouTube Downloader'
         self.downloadProgress = 0
 
+        # HOTKEYS:
+        self.shortcutEnter = QShortcut(QKeySequence('Esc'), self)
+        self.shortcutEnter.activated.connect(lambda x:app.quit())
+        self.shortcutEnter = QShortcut(QKeySequence('Return'), self)
+        self.shortcutEnter.activated.connect(self.addLinkButtonClick)
+        self.shortcutEnter = QShortcut(QKeySequence('Delete'), self)
+        self.shortcutEnter.activated.connect(self.removeLinkButtonClick)
+
         self.linksList = QListWidget(self)
         self.linksList.move(50, 50)
         self.linksList.resize(self.width - 100, self.height - 350)
-        self.linksList.setStyleSheet('QListWidget {background-color: #999999; color: #ffffff}')
+        self.linksList.setStyleSheet('QListWidget {background-color: #FFDAB9; color: #FF0000; border-top-left-radius: 30px; padding: 10px; border-top-right-radius: 30px; font: bold; font-size: 12px; border: 5px solid #ffffff}')
         self.linksList.clicked.connect(self.selectLinkClick)
 
         self.clearListButton = QPushButton('Clear List', self)
         self.clearListButton.move(50, self.height - 300)
         self.clearListButton.resize((self.width - 100) / 2, 30)
-        self.clearListButton.setStyleSheet('QPushButton {background-color: #B55555; color: #ffffff; font: bold; font-size: 12px} QPushButton:hover {background-color: #FF0000; color: #000000}')
+        self.clearListButton.setStyleSheet('QPushButton {background-color: #B22222; color: #ffffff; font: bold; font-size: 12px; border-bottom-left-radius: 30px} QPushButton:hover {background-color: #FF0000}')
         self.clearListButton.clicked.connect(self.clearListButtonClick)
 
         self.addLinkButton = QPushButton('Remove Link', self)
         self.addLinkButton.move((self.width - 100) / 2 + 50, self.height - 300)
         self.addLinkButton.resize((self.width - 100) / 2 , 30)
-        self.addLinkButton.setStyleSheet('QPushButton {background-color: #B55555; color: #ffffff; font: bold; font-size: 12px} QPushButton:hover {background-color: #FF0000; color: #000000}')
+        self.addLinkButton.setStyleSheet('QPushButton {background-color: #B22222; color: #ffffff; font: bold; font-size: 12px; border-bottom-right-radius: 30px} QPushButton:hover {background-color: #FF0000}')
         self.addLinkButton.clicked.connect(self.removeLinkButtonClick)
 
         self.addLinkTextBox = QLineEdit(self)
         self.addLinkTextBox.move(50, self.height - 250)
         self.addLinkTextBox.resize(self.width - 300, 30)
-        self.addLinkTextBox.setStyleSheet('QLineEdit {background-color: #888888; color: #ffffff; border: 0}')
+        self.addLinkTextBox.setStyleSheet('QLineEdit {background-color: #ffffff; color: #000000; border-top-left-radius: 15px; border-bottom-left-radius: 15px; padding-left: 10px; font: bold; font-size: 12px}')
 
         self.addLinkButton = QPushButton('Add Link', self)
         self.addLinkButton.move(self.width - 250, self.height - 250)
         self.addLinkButton.resize(200, 30)
-        self.addLinkButton.setStyleSheet('QPushButton {background-color: #6B8E23; color: #ffffff; font: bold; font-size: 12px} QPushButton:hover {background-color: #00FF00; color: #000000}')
+        self.addLinkButton.setStyleSheet('QPushButton {background-color: #6B8E23; color: #ffffff; font: bold; font-size: 12px; border-top-right-radius: 15px; border-bottom-right-radius: 15px} QPushButton:hover {background-color: #00FF00}')
         self.addLinkButton.clicked.connect(self.addLinkButtonClick)
 
         self.feedbackLabel = QLabel(self)
         self.feedbackLabel.setText('Paste a YouTube link...')
         self.feedbackLabel.move(50, self.height - 200)
         self.feedbackLabel.resize(self.width - 100, 100)
-        self.feedbackLabel.setStyleSheet('QLabel {color: #888888; font: bold; font-size: 20px}')
+        self.feedbackLabel.setStyleSheet('QLabel {color: #6B8E23; font: bold; font-size: 20px}')
         self.feedbackLabel.setAlignment(Qt.AlignCenter)
 
         self.progressBar = QProgressBar(self)
         self.progressBar.move(50, self.height - 65)
         self.progressBar.resize(self.width / 2 - 200, 30)
         self.progressBar.setValue(self.downloadProgress)
-        self.progressBar.setStyleSheet('QProgressBar {color: #00FF00; font: bold; font-size: 14px}')
+        self.progressBar.setStyleSheet('QProgressBar {color: #00FF00; font: bold; font-size: 14px; border-radius: 15px; text-align: center}')
 
         downloadButton = QPushButton('Download', self)
         downloadButton.move(self.width / 2 - 100, self.height - 75)
         downloadButton.resize(200, 50)
-        downloadButton.setStyleSheet('QPushButton {background-color: #6B8E23; color: #ffffff; font: bold; font-size: 24px} QPushButton:hover {background-color: #00FF00; color: #000000}')
+        downloadButton.setStyleSheet('QPushButton {background-color: #6B8E23; color: #ffffff; font: bold; font-size: 24px; border-radius: 25px} QPushButton:hover {background-color: #00FF00}')
         downloadButton.clicked.connect(self.downloadButtonClick)
 
         self.onlyAudioCheckbox = QCheckBox(self)
@@ -93,7 +102,7 @@ class Window(QMainWindow):
         self.setFixedWidth(self.width)
         self.setFixedHeight(self.height)
         self.setWindowTitle(self.title)
-        self.setStyleSheet('QMainWindow {background-color: #111111}')
+        self.setStyleSheet('QMainWindow {background-color: #BDB76B}')
         self.show()
 
     def addLinkButtonClick(self):

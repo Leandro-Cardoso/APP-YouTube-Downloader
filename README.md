@@ -1,5 +1,5 @@
 # Project YouTube Downloader
-> Status: Developing ⚠️ (version beta 0.2.0)
+> Status: Developing ⚠️ (version beta 0.3.0)
 
 <center>
 
@@ -13,21 +13,21 @@
 + Download videos.
 + Download audios.
 + Download playlists.
-+ Interface.
++ Simple interface.
 + Progress bar.
-+ Responsive window.
-+ Preview videos.
++ Hotkeys.
++ Responsive window. (Developing ⚠️)
++ Preview videos. (Developing ⚠️)
 
 ## Platforms:
 + Windows
 
 ## Technologies:
 + Python 3.9.7
-+ PyQt5
-+ PyTube
++ PyTube 12.0.0
++ PyQt5 5.15.6
 
 ## How to run:
-+ Developing ⚠️
 
 ```bash
 # Clone repository:
@@ -35,6 +35,9 @@ $ git clone <https://github.com/Leandro-Cardoso/APP-YouTube-Downloader>
 
 # Open the project folder:
 $ cd APP-YouTube-Downloader
+
+# Install all requirements:
+$ pip install -r requirements.txt
 
 # Start app:
 $ python app.py
