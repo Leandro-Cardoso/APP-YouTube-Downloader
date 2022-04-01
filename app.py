@@ -12,8 +12,9 @@ def downloadYoutubeVideo(url, isOnlyAudio = False):
 
 def downloadYoutubePlaylist(playlist, isOnlyAudio = False):
     '''Download a YouTube playlist video or only audio.'''
-    playlist = Playlist(playlist)
-    for url in playlist:
+    urls = Playlist(playlist).video_urls
+    print(urls)
+    for url in urls:
         downloadYoutubeVideo(url, isOnlyAudio)
 
 # INTERFACE:
@@ -34,12 +35,16 @@ class Window(QMainWindow):
         self.downloadProgress = 0
 
         # HOTKEYS:
-        self.shortcutEnter = QShortcut(QKeySequence('Esc'), self)
-        self.shortcutEnter.activated.connect(lambda x:app.quit())
-        self.shortcutEnter = QShortcut(QKeySequence('Return'), self)
+        self.shortcutEsc = QShortcut(QKeySequence('Esc'), self)
+        self.shortcutEsc.activated.connect(lambda x:app.quit())
+        self.shortcutReturn = QShortcut(QKeySequence('Return'), self)
+        self.shortcutReturn.activated.connect(self.addLinkButtonClick)
+        self.shortcutEnter = QShortcut(QKeySequence('Enter'), self)
         self.shortcutEnter.activated.connect(self.addLinkButtonClick)
-        self.shortcutEnter = QShortcut(QKeySequence('Delete'), self)
-        self.shortcutEnter.activated.connect(self.removeLinkButtonClick)
+        self.shortcutDelete = QShortcut(QKeySequence('Delete'), self)
+        self.shortcutDelete.activated.connect(self.removeLinkButtonClick)
+        self.shortcutDel = QShortcut(QKeySequence(','), self)
+        self.shortcutDel.activated.connect(self.removeLinkButtonClick)
 
         self.linksList = QListWidget(self)
         self.linksList.move(50, 50)
@@ -63,6 +68,7 @@ class Window(QMainWindow):
         self.addLinkTextBox.move(50, self.height - 250)
         self.addLinkTextBox.resize(self.width - 300, 30)
         self.addLinkTextBox.setStyleSheet('QLineEdit {background-color: #ffffff; color: #000000; border-top-left-radius: 15px; border-bottom-left-radius: 15px; padding-left: 10px; font: bold; font-size: 12px}')
+        self.addLinkTextBox.setFocus()
 
         self.addLinkButton = QPushButton('Add Link', self)
         self.addLinkButton.move(self.width - 250, self.height - 250)
@@ -78,10 +84,10 @@ class Window(QMainWindow):
         self.feedbackLabel.setAlignment(Qt.AlignCenter)
 
         self.progressBar = QProgressBar(self)
-        self.progressBar.move(50, self.height - 65)
-        self.progressBar.resize(self.width / 2 - 200, 30)
+        self.progressBar.move(0, self.height - 15)
+        self.progressBar.resize(self.width, 15)
         self.progressBar.setValue(self.downloadProgress)
-        self.progressBar.setStyleSheet('QProgressBar {color: #00FF00; font: bold; font-size: 14px; border-radius: 15px; text-align: center}')
+        self.progressBar.setStyleSheet('QProgressBar {background-color: #BDB76B; color: #000000; font: bold; font-size: 14px; text-align: center}')
 
         downloadButton = QPushButton('Download', self)
         downloadButton.move(self.width / 2 - 100, self.height - 75)
@@ -162,12 +168,12 @@ class Window(QMainWindow):
         downloadList = self.createDownloadList()
         for link in downloadList:
             if self.onlyAudioCheckbox.isChecked():
-                if 'list' in link:
+                if 'playlist' in link:
                     downloadYoutubePlaylist(link, True)
                 else:
                     downloadYoutubeVideo(link, True)
             else:
-                if 'list' in link:
+                if 'playlist' in link:
                     downloadYoutubePlaylist(link, False)
                 else:
                     downloadYoutubeVideo(link, False)
