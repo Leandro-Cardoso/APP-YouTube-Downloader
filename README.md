@@ -1,5 +1,5 @@
 # Project YouTube Downloader
-> Status: Developing ⚠️ (version beta 0.3.0)
+> Status: Developing ⚠️ (version 1.0.0)
 
 <center>
 
@@ -7,7 +7,7 @@
 
 </center>
 
-<p>Descrição...</p>
+<p>Download a list of Youtube videos and playlists, in highest resolution video or only audio.</p>
 
 ## Features:
 + Download videos.
