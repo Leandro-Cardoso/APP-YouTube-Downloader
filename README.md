@@ -9,6 +9,8 @@
 
 <p>Download a list of Youtube videos and playlists, in highest resolution video or only audio.</p>
 
+[DOWNLOAD LINK](https://github.com/Leandro-Cardoso/APP-YouTube-Downloader/raw/master/exe/APP%20YouTube%20Downloader%20(v.1.0.0).exe) (version 1.0.0)
+
 ## Features:
 + Download videos.
 + Download audios.
